@@ -6,37 +6,16 @@ spec:
   params:
     - name: greeting
       default: Hello World
+  securityContext:
+    allowPrivilegeEscalation: false
+    runAsNonRoot: true
+    capabilities:
+      drop: ["ALL"]
   steps:
     - name: echo
       image: alpine
       securityContext:
-        runAsNonRoot: true
-        allowPrivilegeEscalation: false
-        capabilities:
-          drop:
-            - ALL
-        seccompProfile:
-          type: RuntimeDefault
+        runAsUser: 1001
       script: |
         #!/bin/sh
         echo "$(params.greeting)"
----
-apiVersion: tekton.dev/v1beta1
-kind: Task
-metadata:
-  name: goodbye
-spec:
-  steps:
-    - name: echo
-      image: alpine
-      securityContext:
-        runAsNonRoot: true
-        allowPrivilegeEscalation: false
-        capabilities:
-          drop:
-            - ALL
-        seccompProfile:
-          type: RuntimeDefault
-      script: |
-        #!/bin/sh
-        echo "Goodbye World!"
