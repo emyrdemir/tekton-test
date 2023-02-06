@@ -2,6 +2,8 @@ apiVersion: tekton.dev/v1beta1
 kind: Task
 metadata:
   name: hello
+  annotations:
+    tekton.dev/pod-security-policy: restricted
 spec:
   params:
     - name: greeting
